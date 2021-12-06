@@ -27,12 +27,15 @@
 		<div class="a-bloque-boton-analizar">
 		  <button class="a-boton-analizar" (click)="analizar(texto.value)">ANALIZAR</button>
 		</div>
-		<div >
+		<div>
+			<label id="label-posicion">Linea: 0 - Columna: 0</label>
+		</div>
+		<div>
 		  <div class="row a-bloque-general">
 			<div class="col-sm a-bloque-general-entrada">
 			  <textarea class="a-area-texto a-numeros" readonly cols="1" rows="20" id="entrada-lineas" name="entrada-lineas">1</textarea>
 			  <div  class="col-sm a-entrada">
-			<textarea class="a-area-texto a-area-texto-usables" placeholder="Entrada" rows="20" id="entrada" name="entrada"></textarea>
+			<textarea class="a-area-texto a-area-texto-usables" placeholder="Entrada" rows="20" id="entrada" name="entrada" onkeyup="actualizarPosicion()" onkeydown="actualizarPosicion()" onclick="actualizarPosicion()"></textarea>
 			  </div>
 			</div>    
 			<div class="col-sm a-bloque-general-entrada">
@@ -55,7 +58,7 @@
 		<p>COPYRIGHT © UNIVERSIDAD SAN CARLOS DE GUATEMALA </p>
 	</div>	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-
+	<script src="js/funcionalidades-editor.js"></script>
 </body>
 </html>
 

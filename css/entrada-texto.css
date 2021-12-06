@@ -75,6 +75,7 @@
     display: inline-block;
     border-radius: 5px;
     font-size: 16px;
+    transition: 0.8s;
 }
 
 .a-bloque-boton-analizar{
@@ -87,5 +88,6 @@ button:hover{
     /*background-color: yellow;*/
     transform: scale(1.05,1.05);
     transition: scale(1.05,1.05) .2s ease-in-out;
+    color:rgba(29, 30, 31, 0.8);
 }
 

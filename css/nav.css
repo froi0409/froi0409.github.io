@@ -19,6 +19,7 @@
 button{
     color:aliceblue;
     font-weight: bold;
+    transition: 0.8s;
 }
 
 p{
