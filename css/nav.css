@@ -1,0 +1,38 @@
+.a-navigation{
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.8);
+
+}
+
+.a-letter-title{
+    color: aliceblue;
+}
+
+.a-buttons-action{
+    display: flex;
+}
+
+button{
+    color:aliceblue;
+    font-weight: bold;
+}
+
+p{
+    font-weight: bold;
+}
+
+button:hover{
+    background-color: yellow;
+    transform: scale(1.05,1.05);
+    transition: scale(1.05,1.05) .2s ease-in-out;
+}
+
+p:hover{
+    transform: scale(1.2,1.2);
+    transition: scale(1.2,1.2) .2s ease-in-out;
+}
+
