@@ -56,9 +56,32 @@
 	
 	<div class="a-footer">
 		<p>COPYRIGHT © UNIVERSIDAD SAN CARLOS DE GUATEMALA </p>
-	</div>	
+	</div>	<div>
+        Posicion : <span id="position"></span>
+      </div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 	<script src="js/funcionalidades-editor.js"></script>
+	<script>
+		$("#entrada-lineas").scroll(function () { 
+		$("#entrada").scrollTop($("#entrada-lineas").scrollTop());
+		$("#entrada").scrollLeft($("#entrada-lineas").scrollLeft());
+	  });
+	  $("#entrada").scroll(function () { 
+		$("#entrada-lineas").scrollTop($("#entrada").scrollTop());
+		$("#entrada-lineas").scrollLeft($("#entrada").scrollLeft());
+	  });
+	  $("#entrada").on('keydown keyup mousedown mouseup',function(e){		   
+		   p = $('#entrada').val().substr(0, $('#entrada')[0].selectionStart).split("\n");
+		   // line is the number of lines
+		   line = p.length;
+	
+		   // col is the length of the last line
+		   col = p[p.length-1].length + 1;
+		   //console.log("lin: "+line+" col: "+col);
+		   
+		   document.getElementById("position").innerHTML = "lin: "+line+" col: "+col;
+	 });
+	</script>
 </body>
 </html>
 
