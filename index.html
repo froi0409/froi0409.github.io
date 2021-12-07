@@ -25,7 +25,7 @@
 	
 	<div class="container-fluid a-skeleton-content">
 		<div class="a-bloque-boton-analizar">
-		  <button class="a-boton-analizar" (click)="analizar(texto.value)">ANALIZAR</button>
+		  <button class="a-boton-analizar" onclick="parsear(entrada.value)">ANALIZAR</button>
 		</div>
 		<div>
 			<label id="label-posicion">Linea: 0 - Columna: 0</label>
@@ -60,6 +60,7 @@
         Posicion : <span id="position"></span>
       </div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+	<script src="js/funcionalidades-parseo.js"></script>
 	<script src="js/funcionalidades-editor.js"></script>
 	<script>
 		$("#entrada-lineas").scroll(function () { 
