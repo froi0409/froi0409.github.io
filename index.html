@@ -27,30 +27,34 @@
 		  <button class="a-boton-analizar" (click)="analizar(texto.value)">ANALIZAR</button>
 		</div>		
 		<div>
-		  <div class="row a-bloque-general">		
-				<span id="label-posicion">Posicion entrada lin: 1 col: 1</span>			
-			<div class="col-sm a-bloque-general-entrada">			  
-			  <textarea class="a-area-texto a-numeros" readonly cols="1" rows="20" id="entrada-lineas" name="entrada-lineas">1</textarea>
-			  <div  class="col-sm a-entrada">
-				<textarea class="a-area-texto a-area-texto-usables" placeholder="Entrada" rows="20" id="entrada" name="entrada" oninput="checkNumEntrada()"></textarea>
-			  </div>
-			</div>   
-				<span id="label-posicion-2">Posicion salida lin: 1 col: 1</span>	
-			<div class="col-sm a-bloque-general-entrada">			  
-			  <textarea class="a-area-texto a-numeros" readonly cols="1" rows="20" id="salida-lineas" name="salida-lineas">1</textarea>      
-			  <div class="col-sm a-salida">      
-				<textarea class="a-area-texto a-area-texto-usables" placeholder="Salida" rows="20" id="salida" name="salida" oninput="checkNumSalida()">Salida</textarea>
-			  </div>
+		  	<div class="a-bloque-general">
+				<div class="bloque">
+					<p id="label-posicion" class="texto-posicion">Posicion entrada lin: 1 col: 1</p>			
+					<div class="col-sm a-bloque-general-entrada">			  
+						<textarea class="a-area-texto a-numeros" readonly cols="1" rows="20" id="entrada-lineas" name="entrada-lineas">1</textarea>
+						<div  class="col-sm a-entrada">
+							<textarea class="a-area-texto a-area-texto-usables" placeholder="Entrada" rows="20" id="entrada" name="entrada" oninput="checkNumEntrada()"></textarea>
+						</div>
+					</div> 
+				</div>  
+				<div class="bloque">
+					<p id="label-posicion-2" class="texto-posicion">Posicion salida lin: 1 col: 1</p>	
+					<div class="col-sm a-bloque-general-entrada">			  
+						<textarea class="a-area-texto a-numeros" readonly cols="1" rows="20" id="salida-lineas" name="salida-lineas">1</textarea>      
+						<div class="col-sm a-salida">      
+							<textarea class="a-area-texto a-area-texto-usables" placeholder="Salida" rows="20" id="salida" name="salida" oninput="checkNumSalida()">Salida</textarea>
+						</div>
+					</div>
+				</div>
+		  	</div>
+			  <div class="a-bloque-consola">
+				<textarea class="a-area-texto a-area-texto-usables-console" placeholder="consola" rows="10" id="consola" name="consola"></textarea> 			
+				
 			</div>
-		  </div>
-		</div>
-		<div>
-			<div class="col-sm a-bloque-consola">
-				<textarea class="a-area-texto a-area-texto-usables-console" placeholder="consola" rows="20" id="consola" name="consola"></textarea>    				
-			</div>
-		</div>
-	
+		</div>	
+		
 	</div>	
+	
 	<div class="a-footer">
 		<p>COPYRIGHT © UNIVERSIDAD SAN CARLOS DE GUATEMALA </p>
 	</div>	
