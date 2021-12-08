@@ -17,6 +17,11 @@
     overflow: hidden;
 }
 
+.texto-posicion{
+    padding-left: 20px;
+    width: 40%;
+}
+
 .a-salida{
     /*
     float: right;
@@ -34,6 +39,12 @@
     border-right: 20px;
 }
 
+.bloque{
+    display: block;
+    width: 50%;
+    position: center;
+}
+
 .a-bloque-general{
     display: inline-flex;
     width: 97vw;
@@ -41,24 +52,21 @@
 }
 .a-bloque-general-entrada{
     display: inline-flex;
-    width: 50%;
+    width: 100%;
     padding-left: 30px;
-    
 }
 
 .a-bloque-consola{
-    display: inline-flex;
-    width: 97%;
-    height: 200px;
-    background-color:  rgba(28, 30, 32, 0.8);
-    color: aliceblue;
-    
-
+    position: inline-flex;
+    width: 99%;   
+    color: aliceblue;  
+    padding-left: 30px;
 }
 
 .a-area-texto-usables-console{
     width: 100%;
     color: aliceblue;
+    background-color:  rgba(28, 30, 32, 0.8); 
 }
 
 .a-area-texto-usables{
