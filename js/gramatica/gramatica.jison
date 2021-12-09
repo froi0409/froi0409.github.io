@@ -191,7 +191,7 @@ block_commentary [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 /*Definicion de la gramatica*/
 
 init
-    : ini EOF {/*return reversaArreglo($1);*/}
+    : instrucciones_globales_block EOF {/*return reversaArreglo($1);*/}
     ;
 
 instrucciones_globales_block : 
@@ -212,6 +212,7 @@ declarar_struct :
     LLAVE_INICIO                    //{
         declarar_struct_variables   // int a;
     LLAVE_FIN                       //}
+    ;
 
 //Los struct solo pueden tener declaracion de variables
 declarar_struct_variables : 
@@ -241,7 +242,7 @@ instrucciones_unidad :
     | instrucciones_variables_asignacion PUNTO_COMA
     | instrucciones_print PUNTO_COMA
     ;
-
+//#IF
 //instrucciones sentencia de control, IF
 instrucciones_sentencia_control_ifs : 
         instrucciones_sentencia_control_ifs_if              //if
@@ -270,6 +271,7 @@ instrucciones_sentencia_control_ifs_else:
     | //epsilon, cuando no viene else
     ;
 
+//#SWITCH
 //Instrucciones sentencia SWITCH, el identificador es el nombre de alguna variable
 instrucciones_sentencia_control_switch : 
         SWITCH PAREN_INICIO IDENTIFICADOR PAREN_FIN         // switch (variable)
@@ -303,6 +305,40 @@ instrucciones_sentencia_control_switch_cuerpo_case_break : BREAK PUNTO_COMA //br
     | //epsilon
     ;
 
+//#WHILE
+//LOOP WHILE
+instrucciones_loops_while : 
+        WHILE condicion     //while (condicion)
+        instrucciones_block //{ instrucciones varias }
+    ;
+
+//#DO WHILE
+//LOOP DO WHILE
+instrucciones_loops_do_while :
+        DO                          //do
+        instrucciones_block         //{ instrucciones varias }
+        WHILE condicion PUNTO_COMA  //while ;
+    ;
+
+//#FOR
+//LOOP FOR
+instrucciones_loops_for :
+        FOR PAREN_INICIO 
+                instrucciones_variables_asignacion PUNTO_COMA //inicio: Declaracion o asignacion valor variable             $ for (int i = 0; i < 10; i++)
+                operacion_general PUNTO_COMA                  //fin:    condicion --> debe de retornar un valor boolean     $ { 
+                instrucciones_for                             //instrucciones permitas a los for                            $    instrucciones varias 
+            PAREN_FIN                                         //                                                            $ }
+        instrucciones_block
+    ;
+    //los for tienen pocas acciones permitidas dentro de la ultima fase de la declaracion
+instrucciones_for :
+        instrucciones_variables_asignacion //asignar un nuevo valor a alguna variable
+    |   instrucciones_print                //print
+        /////////////INCREMENTO Y DECREMENTO
+    | valores_datos INCREMENTO
+    | valores_datos DECREMENTO
+    ;
+
 //son los tipos de las variables primitivos junto a tipos mas complejos
 tipo_datos_arreglo : tipo_datos_primarios CORCH_INICIO CORCH_FIN //int[]
     ;
@@ -315,12 +351,32 @@ tipo_datos_primarios :
     | STRING
     ;
 
+//#Print
+instrucciones_print : //seguramente haya un cambio de operacion_general a operaciones que retornen String unicamente
+        print PAREN_INICIO instrucciones_print_valores PAREN_FIN
+    |   println PAREN_INICIO instrucciones_print_valores PAREN_FIN
+    ;
+    //Conjunto de valores a imprimir por el print
+instrucciones_print_valores :
+        instrucciones_print_valores //Texto1
+        COMA                        // ,
+        operacion_general           //TEXTO2
+    |   operacion_general   //TextoX
+    //|   //epsilon
+    ;
+
 //valores
+    //se seoari dek valores_datos porque GATO variable no puede efectuar un incremento
+valores_datos_arreglos :
+        GATO nombres_variables_unidad // #nombreVariable  --> se usa para copiar los valores de un arreglo
+    ;
     //valores de variables incluidos
-valores_datos:
+valores_datos :
         nombres_variables_unidad      // nombreVariable
-    |   GATO nombres_variables_unidad // #nombreVariable  --> se usa para copiar los valores de un arreglo
-    |   valores_datos_primarios       // Valores primitivos
+    |   nombres_variables_unidad GATO // nombreVariable#  --> se usa para efectuar operaciones sobre todos los valores del arreglo
+    //|   valores_datos_primarios       // Valores primitivos
+    //| nombres_variables_unidad PAREN_INICIO operacion_general PAREN_FIN //Para arrays en la posicion [a] donde a es una operacion aritmetica con resultado entero
+    //| CORCH_INI bloque_valores_operacion_general CORCH_FIN
     ;
     //valores ordinarios
 valores_datos_primarios : 
@@ -328,7 +384,7 @@ valores_datos_primarios :
 	| DECIMAL_VALUE
 	| BOOLEAN_VALUE
 	| CHAR_VALUE
-	//| parametro_valor_name
+	//| parametro_valor_name 
 	//| nombres_variables_unidad
 	//| funciones_con_valor
 	;
@@ -367,14 +423,16 @@ operacion_general ::=
     | operacion_general COS   operacion_general
     | operacion_general TAN   operacion_general
     /////////////VALORES
-    | valores_datos
+    | valores_datos //variables y valores primitivos
+    | valores_datos_primarios //valores primitivos
+    | valores_datos_arreglos //Aca se debe de realizar una comparacion posterior, ya que solo sirve para asignacion de valor a otro array
 	| SIGNO_MIN operacion_general %prec UMINUS
-	| PAREN_INI operacion_general PAREN_FIN 
-    ;    
+	| PAREN_INICIO operacion_general PAREN_FIN 
+    ;
 
 //por definir
-instrucciones_variables_declaracion
-instrucciones_variables_asignacion
+//instrucciones_variables_declaracion
+//instrucciones_variables_asignacion
 
 
 
