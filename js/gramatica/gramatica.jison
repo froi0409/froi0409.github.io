@@ -324,7 +324,7 @@ instrucciones_loops_do_while :
 //LOOP FOR
 instrucciones_loops_for :
         FOR PAREN_INICIO 
-                instrucciones_variables_asignacion PUNTO_COMA //inicio: Declaracion o asignacion valor variable             $ for (int i = 0; i < 10; i++)
+                instrucciones_variables_declaracion PUNTO_COMA //inicio: Declaracion o asignacion valor variable             $ for (int i = 0; i < 10; i++)
                 operacion_general PUNTO_COMA                  //fin:    condicion --> debe de retornar un valor boolean     $ { 
                 instrucciones_for                             //instrucciones permitas a los for                            $    instrucciones varias 
             PAREN_FIN                                         //                                                            $ }
@@ -339,19 +339,8 @@ instrucciones_for :
     | valores_datos DECREMENTO
     ;
 
-//son los tipos de las variables primitivos junto a tipos mas complejos
-tipo_datos_arreglo : tipo_datos_primarios CORCH_INICIO CORCH_FIN //int[]
-    ;
-    //son los tipos de las variables primitivos, int, char, String, boolean, float, double
-tipo_datos_primarios :
-      INT
-    | DOUBLE
-    | BOOLEAN
-    | CHAR
-    | STRING
-    ;
-
-//#Print
+//#PRINT
+//sentencias para declarar los print
 instrucciones_print : //seguramente haya un cambio de operacion_general a operaciones que retornen String unicamente
         print PAREN_INICIO instrucciones_print_valores PAREN_FIN
     |   println PAREN_INICIO instrucciones_print_valores PAREN_FIN
@@ -365,7 +354,59 @@ instrucciones_print_valores :
     //|   //epsilon
     ;
 
-//valores
+//#CONDICION
+//CONDICION Retorna true or false
+condicion :
+        PAREN_INICIO operacion_general PAREN_FIN
+    ;
+
+//#DECLARAR VARIABLES
+//por definir
+instrucciones_variables_declaracion :
+        tipo_datos_generales                            //Tipo
+        instrucciones_variables_declaracion_conjunto    //Conjunto de nombres de variables con o sin valores
+    ;
+    //Declarar variables con o sin valores
+instrucciones_variables_declaracion_conjunto ://Puede venir: a, b
+        instrucciones_variables_declaracion_conjunto    //a
+        COMA                                            //,
+        instrucciones_variables_declaracion_simple      //b
+    |   instrucciones_variables_declaracion_simple      //a, que pasa arriba
+    ;
+instrucciones_variables_declaracion_simple :
+        instrucciones_variables_asignacion //identificamos y asignamos valor        
+        //Declaracion sin asignacion
+    |   IDENTIFICADOR        //Nombre variable
+    //|   //epsilon
+    ;
+
+//#ASIGNAR VALORES A VARIABLES    
+    //asignacion sin declarar antes
+instrucciones_variables_asignacion :
+        IDENTIFICADOR        //Nombre variable
+        IGUAL                // =
+        operacion_general    //Valor
+    ;
+
+//#DATA TYPE
+//son los tipos de las variables primitivos junto a tipos mas complejos
+tipo_datos_generales : 
+        tipo_datos_arreglo
+    |   tipo_datos_primarios
+    ;
+
+tipo_datos_arreglo : tipo_datos_primarios CORCH_INICIO CORCH_FIN //int[]
+    ;
+    //son los tipos de las variables primitivos, int, char, String, boolean, float, double
+tipo_datos_primarios :
+      INT
+    | DOUBLE
+    | BOOLEAN
+    | CHAR
+    | STRING
+    ;
+
+//#VALUE DATA TYPES
     //se seoari dek valores_datos porque GATO variable no puede efectuar un incremento
 valores_datos_arreglos :
         GATO nombres_variables_unidad // #nombreVariable  --> se usa para copiar los valores de un arreglo
@@ -392,11 +433,10 @@ nombres_variables_unidad : IDENTIFICADOR //nombreVariable
     //| GATO IDENTIFICADOR                 //#nombreVariable, para arreglos copiados por valores
     ;
 
-//CONDICION Retorna true or false
-condicion :
-        PAREN_INICIO operacion_general PAREN_FIN
-    ;
-
+//#OPERACIONES ARITMETICAS
+//#OPERACIONES LOGICAS
+//#OPERACIONES RELACIONALES
+//#Operaciones
 operacion_general ::= 
 	/////////////OPERACIONES LOGICAS
 	  operacion_general AND  operacion_general 
@@ -429,11 +469,3 @@ operacion_general ::=
 	| SIGNO_MIN operacion_general %prec UMINUS
 	| PAREN_INICIO operacion_general PAREN_FIN 
     ;
-
-//por definir
-//instrucciones_variables_declaracion
-//instrucciones_variables_asignacion
-
-
-
-
