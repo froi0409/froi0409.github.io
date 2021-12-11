@@ -551,7 +551,7 @@ nombres_variables_unidad : IDENTIFICADOR //nombreVariable
 //#FUNCIONES ESPECIALES PARA STRING
 funciones_con_valor_string : 
         CARACTEROFPOSITION PAREN_INICIO operacion_general PAREN_FIN //caracterOfPosition (2) --> devuelve char
-    |   subString   PAREN_INICIO //subString (2, 4)  -->    devuelve un substring
+    |   SUBSTRING   PAREN_INICIO //subString (2, 4)  -->    devuelve un substring
                         operacion_general 
                             COMA
                         operacion_general
