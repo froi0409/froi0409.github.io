@@ -175,14 +175,6 @@ block_commentary [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 [^\s]*     console.log("Lexico", yytext, yylloc.first_line, yylloc.first_column + 1)  
 
 /lex
-%{
-    function linea(linea){
-        return linea + lineNumber;
-    }
-    function columna(column){
-        return column + columnNumber;
-    }
-%}    
     %left 'OR'
     %left 'AND'    
     %left 'MAYOR_IGUAL' 'MENOR_IGUAL' 'DIFERENTE_IGUAL' 'IGUAL_IGUAL' 'MAYOR' 'MENOR' 'IGUAL'
