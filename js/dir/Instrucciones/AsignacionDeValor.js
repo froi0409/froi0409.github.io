@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AsignacionDeValor = void 0;
 class AsignacionDeValor {
-    ejecutar(tabla, ast) {
+    ejecutar(tabla, listadoErrores, ast) {
         throw new Error("Method not implemented.");
     }
     traducir(tabla, ast) {

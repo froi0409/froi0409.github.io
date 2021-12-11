@@ -9,6 +9,9 @@ class Simbolo {
         this.identificador = identificador;
         this.tipo = tipo;
         this.valor = valor;
+        this.tipoContexto = '';
+        this.nombreContexto = '';
+        this.idContexto = '';
         this.linea = linea;
         this.columna = columna;
     }
@@ -20,6 +23,25 @@ class Simbolo {
     //Obtenemos el tipo de simbolo
     getTipo() {
         return this.tipo;
+    }
+    //Setters y Getters de Contexto
+    setTipoContexto(tipoContexto) {
+        this.tipoContexto = tipoContexto;
+    }
+    getTipoContexto() {
+        return this.tipoContexto;
+    }
+    setNombreContexto(nombreContexto) {
+        this.nombreContexto = nombreContexto;
+    }
+    getNombreContexto() {
+        this.nombreContexto;
+    }
+    setIdContexto(idContexto) {
+        this.idContexto = idContexto;
+    }
+    getIdContexto() {
+        return this.idContexto;
     }
 }
 exports.Simbolo = Simbolo;
