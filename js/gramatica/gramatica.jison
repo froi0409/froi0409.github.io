@@ -164,8 +164,8 @@ block_commentary [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
     //exports.listaErroresParser = getErrorList();
 %}
 
-    %left 'ELSE'
-    %left 'ELSE_IF'
+    %nonassoc 'ELSE'
+    %nonassoc 'ELSE_IF'
     //%left 'IGUAL'
     %right 'SIGNO_INTERROGACION_CIERRE' 'DOS_PUNTOS'
     %left 'OR'
@@ -177,8 +177,8 @@ block_commentary [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
     //%left 'POW' 'SQRT' 'SIN' 'COS' 'TAN' 'LOG10'
     %left 'CONCAT_POW' 'CONCAT_AND'
     %right 'UMINUS' 'NOT'
-    //%left incrementos 
-    %left 'PAREN_INICIO' 'PAREN_FIN' //[] .     
+    //%left 'INCREMENTO' 'DECREMENTO'//incrementos 
+    %left 'PAREN_INICIO' 'PAREN_FIN' 'CORCH_INICIO' 'CORCH_FIN' //[] . 
 
 %start init
 
@@ -196,17 +196,25 @@ instrucciones_globales_block :
 
 //De manera global solo se pueden declarar funciones, struct y variables
 instrucciones_globales_unit :
-      instrucciones_variables_declaracion PUNTO_COMA
+      instrucciones_variables_declaracion PUNTO_COMA //declaraciones
+    | instrucciones_variables_asignacion PUNTO_COMA //asignaciones
     | instrucciones_funciones_declaracion //normales y main
-    | declarar_struct PUNTO_COMA
+    | declarar_struct PUNTO_COMA //estructuras declaraciones
     ;
 
 //#DECLARAR FUNCIONES
 instrucciones_funciones_declaracion : 
-        instrucciones_funciones_declaracion_tipo_funciones   //Tipo funcion   --> void
+        //FUNCION VOID
+        VOID                                                 //Tipo funcion   --> void
         instrucciones_funciones_declaracion_nombre_funciones //Nombre funcion --> suma
         instrucciones_funciones_declaracion_parametros       //Parametros     --> (int num1, int num2)
-        instrucciones_block                                  //Codigo         --> { codigo.......... }
+        instrucciones_block_funcion                                  //Codigo         --> { codigo.......... }
+        { console.log('Funcion tipo: ' + $1 + ' nombre: ' + $2); }
+        //FUNCION DE OTRO TIPO (ARRAYS INCLUIDOS)
+      | tipo_datos_generales                                 //Tipo funcion   --> datos generales (incluye arrays)
+        instrucciones_funciones_declaracion_nombre_funciones //Nombre funcion --> suma
+        instrucciones_funciones_declaracion_parametros       //Parametros     --> (int num1, int num2)
+        instrucciones_block_funcion                                  //Codigo         --> { codigo.......... }
         { console.log('Funcion tipo: ' + $1 + ' nombre: ' + $2); }
     ;
     //Nombres de funciones
@@ -239,12 +247,13 @@ instrucciones_funciones_declaracion_parametros_unidad :
         { $$ = ' ' + $2 + ' : ' + $1 ; }   
     ;
     //tipos de funciones, usan void de extra
+    /*
 instrucciones_funciones_declaracion_tipo_funciones :
       VOID                  //No retorna ningun tipo
       { $$ = $1; }
     | tipo_datos_generales  //Puede retornar tipos de datos ordinarios y de tipo Array
       { $$ = $1; }
-    ;
+    ;*/
 
 //#STRUCT
 declarar_struct : 
@@ -265,6 +274,12 @@ declarar_struct_variables :
 //Conjunto de instrucciones generales, es decir instrucciones ejecutables dentro de las funciones, loops, etc
 //El conjunto de instrucciones se empaqueta entre llaves
     //Conjunto de intrucciones para ifs, switch y funciones
+instrucciones_block_funcion : 
+      LLAVE_INICIO instrucciones_unidad_varios LLAVE_FIN //si vienen varios se agregan entre llaves {}
+        { console.log('Bloque de instrucciones con muchos datos: '); }
+    | LLAVE_INICIO                             LLAVE_FIN //si no vienen instrucciones, se tienen que usar llaves
+        { console.log('Bloque de instrucciones sin datos: '); }
+    ;
 instrucciones_block : 
       LLAVE_INICIO instrucciones_unidad_varios LLAVE_FIN //si vienen varios se agregan entre llaves {}
         { console.log('Bloque de instrucciones con muchos datos: '); }
@@ -296,12 +311,14 @@ instrucciones_unidad :
       { console.log('Se efectuo llamada de declaracion: '); }
     | instrucciones_variables_asignacion PUNTO_COMA     //Comienza con nombreVariable (es un IDENTIFICADOR) = valor
       { console.log('Se efectuo llamada de asignacion de valores: '); }
+    | instrucciones_variables_asignacion_in_de_crement PUNTO_COMA //Se hace un incremento var++ o un decremento var--
+      { console.log('Se efectuo llamada de asignacion de incremento/decremento: '); }
     | instrucciones_print PUNTO_COMA                    //Comienza con print
       { console.log('Se efectuo llamada de print: '); }
     | instrucciones_arreglos_push_pop PUNTO_COMA        //Comienza con nombreVariable (es un IDENTIFICADOR) . pop ó .push
       { console.log('Se efectuo llamada de pop o push: '); }
     | instrucciones_return PUNTO_COMA                   //Comienza con return  
-      { console.log('Se efectuo llamada de return: '); }  
+      { console.log('Se einstrucciones_arreglos_push_popinstrucciones_arreglos_push_popinstrucciones_arreglos_push_popfectuo llamada de return: '); }  
     ;
     //Conjunto de intrucciones para FOR, WHILE y DO WHILE
 instrucciones_block_loops : 
@@ -320,7 +337,7 @@ instrucciones_unidad_varios_loops :
     ;
 //instruccion general unitaria para loops, contiene 2 extras
 instrucciones_unidad_loops : 
-      instrucciones_funidad //tambien usan las instrucciones normales
+      instrucciones_unidad //tambien usan las instrucciones normales
     | BREAK    PUNTO_COMA //Break termina el ciclo
       { console.log('Se efectuo llamada de BREAK LOOPS: '); }
     | CONTINUE PUNTO_COMA //Continue termina la iteracion actual
@@ -337,10 +354,19 @@ instrucciones_funciones_llamada : //Estas funciones pueden ser de cualquier tipo
 
 //#IF
 //instrucciones sentencia de control, IF
-instrucciones_sentencia_control_ifs : 
-        instrucciones_sentencia_control_ifs_if              //if        
+instrucciones_sentencia_control_ifs : //#Esto genera 3 errores de Shift/Reduce que se resuelven al ejecutar en analizador, agrega el else_if/else al if mas cercano
+      /*  //IF solitario
+        instrucciones_sentencia_control_ifs_if              //if      
+        //IF con else's if  
+      | instrucciones_sentencia_control_ifs_if              //if        
         instrucciones_sentencia_control_ifs_else_if_block   //else if
-        instrucciones_sentencia_acontrol_ifs_else            //else
+        //IF con else
+      | instrucciones_sentencia_control_ifs_if              //if      
+        instrucciones_sentencia_control_ifs_else           //else  
+        //IF con else's if y else
+      |*/ instrucciones_sentencia_control_ifs_if              //if        
+          instrucciones_sentencia_control_ifs_else_if_block   //else if
+          instrucciones_sentencia_control_ifs_else           //else
     ;
     //if
 instrucciones_sentencia_control_ifs_if : 
@@ -351,6 +377,7 @@ instrucciones_sentencia_control_ifs_if :
 instrucciones_sentencia_control_ifs_else_if_block:  
       instrucciones_sentencia_control_ifs_else_if_block 
       instrucciones_sentencia_control_ifs_else_if //por si vienen varios else if
+    | instrucciones_sentencia_control_ifs_else_if //viene al menos un else if
     | //epsilon, por si no viene ninguno
     ;
     //else if
@@ -389,21 +416,23 @@ instrucciones_sentencia_control_switch_cuerpo_case_varios :
     ;
     //un case
 instrucciones_sentencia_control_switch_cuerpo_case : 
-        CASE valores_datos_primarios DOS_PUNTOS                       //case 2:        --> puede venir int, char, String, boolean, float, double
-            instrucciones_unidad_varios                              //instrucciones
-            instrucciones_sentencia_control_switch_cuerpo_case_break //break;         --> no es obligatorio
-        PUNTO_COMA                                                   //;
+        CASE valores_datos_primarios DOS_PUNTOS                               //case 2:        --> puede venir int, char, String, boolean, float, double
+            instrucciones_sentencia_control_switch_cuerpo_case_instrucciones  //instrucciones
+            instrucciones_sentencia_control_switch_cuerpo_case_break          //break;         --> no es obligatorio
         { console.log('Se efectua CASE'); }
-    |   DEFAULT DOS_PUNTOS                                              //default :
-            instrucciones_unidad_varios                                 //instrucciones
-            instrucciones_sentencia_control_switch_cuerpo_case_break    //break;        --> no es obligatorio
-        PUNTO_COMA                                                      //;
+    |   DEFAULT DOS_PUNTOS                                                    //default :
+            instrucciones_sentencia_control_switch_cuerpo_case_instrucciones  //instrucciones
+            instrucciones_sentencia_control_switch_cuerpo_case_break          //break;        --> no es obligatorio
         { console.log('Se efectua DEFAULT'); }
     ;
 instrucciones_sentencia_control_switch_cuerpo_case_break : BREAK PUNTO_COMA //break ;
        { console.log('Se efectua BREAK SWITCH'); }
     | //epsilon
        { console.log('Se efectua SIN BREAK'); }
+    ;
+instrucciones_sentencia_control_switch_cuerpo_case_instrucciones:
+      instrucciones_unidad_varios //con instrucciones
+    | //epsilon                   //sin instrucciones
     ;
 
 //#WHILE
@@ -437,10 +466,7 @@ instrucciones_for :
         instrucciones_variables_asignacion //asignar un nuevo valor a alguna variable
     |   instrucciones_print                //print
         /////////////INCREMENTO Y DECREMENTO
-    | valores_datos INCREMENTO
-      { console.log('accion de INCREMENTO'); }
-    | valores_datos DECREMENTO
-      { console.log('accion de DECREMENTO'); }
+    |   instrucciones_variables_asignacion_in_de_crement    
     ;
 
 //#FOR EACH
@@ -510,15 +536,18 @@ instrucciones_variables_declaracion_conjunto ://Puede venir: a, b
         instrucciones_variables_declaracion_simple      //b
     |   instrucciones_variables_declaracion_simple      //a, que pasa arriba
     ;
-instrucciones_variables_declaracion_simple :
-        instrucciones_variables_asignacion //identificamos y asignamos valor        
-        //Declaracion sin asignacion
-    |   IDENTIFICADOR        //Nombre variable
-        { console.log('NombreVar: ' + $1); }
+instrucciones_variables_declaracion_simple :     
+    //Declaracion con o sin asignacion
+      IDENTIFICADOR instrucciones_variables_declaracion_simple_asignacion_opcional     //Nombre variable
+      { console.log('NombreVar: ' + $1); }
     //|   //epsilon
     ;
-  
-
+instrucciones_variables_declaracion_simple_asignacion_opcional ://una declaracion puede o no tener un valor
+      IGUAL                // =
+      operacion_general    //Valor
+      { console.log('NombreVar: ' + $1 + '=Valor'); }
+    | //epsilon
+    ;  
 //#ASIGNAR VALORES A VARIABLES    
     //asignacion sin declarar antes
 instrucciones_variables_asignacion :
@@ -527,6 +556,15 @@ instrucciones_variables_asignacion :
         operacion_general    //Valor
         { console.log('NombreVar: ' + $1 + '=Valor'); }
     ;
+
+//#INCREMENTO
+//#DECREMENTO
+instrucciones_variables_asignacion_in_de_crement :
+      valores_datos INCREMENTO
+      { console.log('accion de INCREMENTO'); }
+    | valores_datos DECREMENTO
+      { console.log('accion de DECREMENTO'); }
+  ;
 
 //#DATA TYPE
 //son los tipos de las variables primitivos junto a tipos mas complejos
@@ -565,16 +603,16 @@ valores_datos_arreglos :
         { console.log('Efectuar acciones con' + $1 + '#'); }
     ;
     //valores de variables incluidos
-valores_datos :
+valores_datos : //Hay un conflicto para nombreVariable seguido de PUNTO o CORCH_INICIO, funciona
         nombres_variables_unidad      // nombreVariable
         { console.log('Datos, nombre de variable simple: ' + $1); }
     //|   valores_datos_primarios       // Valores primitivos
     //ARREGLOS
-    | nombres_variables_unidad CORCH_INI arreglos_valores_posiciones CORCH_FIN //Para arrays en la posicion [a] donde a es una operacion aritmetica con resultado entero
+    | nombres_variables_unidad CORCH_INICIO arreglos_valores_posiciones CORCH_FIN //Para arrays en la posicion [a] donde a es una operacion aritmetica con resultado entero      
       { console.log('Datos ArrayEnLaPos, var[' + $3 + '] '); }
-    | nombres_variables_unidad CORCH_INI arreglos_valores_posiciones DOS_PUNTOS arreglos_valores_posiciones CORCH_FIN //Para arrays en la posicion array[begin:end]
+    | nombres_variables_unidad CORCH_INICIO arreglos_valores_posiciones DOS_PUNTOS arreglos_valores_posiciones CORCH_FIN //Para arrays en la posicion array[begin:end]
       { console.log('Datos ArrayEnRango, var[' + $3 + ':' + $5 + '] '); }
-    | CORCH_INI instrucciones_print_valores CORCH_FIN
+    | CORCH_INICIO instrucciones_print_valores CORCH_FIN
       { console.log('Datos Array de datos de los mencionados, var[' + '....., los que aparecen arriba] '); }
     //FUNCIONES PARA VARIABLES DE TIPO STRING
     | nombres_variables_unidad PUNTO funciones_con_valor_string // nombreVariable.funcionEspecialStrings
@@ -602,6 +640,7 @@ valores_datos_primarios :
 	| BOOLEAN_VALUE
 	| CHAR_VALUE
   | STRING_VALUE
+  | NULL
 	//| parametro_valor_name 
 	//| nombres_variables_unidad	
 	;
@@ -638,7 +677,8 @@ funciones_con_valor_string :
 //#FUNCIONES PARSEO DE DATOS
     //Estas funciones son aquellas que se van a utilizar para el parseo de datos
 funciones_con_valor_parsing :
-        funciones_con_valor_parsing_tipo_datos PUNTO PARSE PAREN_INICIO operacion_general PAREN_FIN //--> funciones del tipo tipo.parse(string) solo debe aceptar string
+        //funciones_con_valor_parsing_tipo_datos PUNTO PARSE PAREN_INICIO operacion_general PAREN_FIN //--> funciones del tipo tipo.parse(string) solo debe aceptar string
+        tipo_datos_primarios PUNTO PARSE PAREN_INICIO operacion_general PAREN_FIN //--> funciones del tipo tipo.parse(string) solo debe aceptar string, donde tipo INT DOUBLE BOOLEAN
         { $$ = $1 + '.parse(valor)'; }
     |   funciones_con_valor_parsing_tipo_parseo PAREN_INICIO operacion_general PAREN_FIN //
         { $$ = $1 + '(valor)'; }

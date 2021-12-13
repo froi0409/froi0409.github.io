@@ -26,8 +26,10 @@ void nombreFuncion1(int a, int b, int c){
 
 void nombreFuncion1(int a){
 
-    if (true)
+    if (false)
         println("No entra acá"); 
+    else (false)
+        println("Else");
     if (true)
         return;
 }

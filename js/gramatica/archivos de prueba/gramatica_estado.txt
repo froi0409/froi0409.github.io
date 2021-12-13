@@ -16,10 +16,15 @@ FALTA AGREGAR:
     ### concatenacion pow
     ### concatenacion &
 
-
 FALTAN:
-    #Estructuras.atributo
-    
+    #Estructuras.atributo    
+
+ERRORES:
+    ### Arreglo[begin:end], causa conflictos por el :
+
+CONFLICTOS:
+    ### Else/Else if se agregan al if más cercano, el analizador lo resuelve
+    ### NombreVar seguido de PUNTO/CORCH_INICIO lo resuelve el analizador
 
 PRECEDENCIA
 
