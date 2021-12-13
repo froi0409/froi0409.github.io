@@ -9,8 +9,6 @@ class Funcion {
         this.tipo = tipo;
         this.nombre = nombre;
         this.instrucciones = instrucciones;
-        this.tipoRetorno = '';
-        this.valorRetorno = '';
         this.linea = linea;
         this.columna = columna;
     }
@@ -27,12 +25,6 @@ class Funcion {
     }
     getNombre() {
         return this.nombre;
-    }
-    getTipoRetorno() {
-        return this.tipoRetorno;
-    }
-    getValorRetorno() {
-        return this.valorRetorno;
     }
     getLinea() {
         return this.linea;

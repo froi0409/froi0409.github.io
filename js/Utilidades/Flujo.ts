@@ -2,6 +2,7 @@ import { Instruccion } from "../Instrucciones/Instruccion";
 import { Advertencia } from "./Advertencia";
 import { Funcion } from "./Funcion";
 import { ListaFunciones } from "./ListaFunciones";
+import { ListaStructs } from "./ListaStructs";
 import { Struct } from "./Struct";
 import { TablaSimbolos } from "./TablaDeSimbolos";
 
@@ -10,8 +11,8 @@ import { TablaSimbolos } from "./TablaDeSimbolos";
  * También controla algunos errores semánticos relacionados a aspectos básicos de las function y los struct
  */
 export class Flujo {
-    private structs: Array<Struct>
-    private listaFunciones: Array<ListaFunciones>
+    private structs:ListaStructs;
+    private listaFunciones:ListaFunciones;
     private tablaDeSimbolos: TablaSimbolos;
     private errores: Array<Advertencia>;
 
@@ -21,29 +22,12 @@ export class Flujo {
      * @param funciones Arreglo de las funciones que tendrá el programa
      * @param tablaDeSimbolos Tabla de simbolos que se manejaran en el programa
      */
-    constructor(listaFunciones:Array<ListaFunciones>, tablaDeSimbolos:TablaSimbolos, errores:Array<Advertencia>) {
-        this.structs = [];
+    constructor(structs:ListaStructs, listaFunciones:ListaFunciones, tablaDeSimbolos:TablaSimbolos, errores:Array<Advertencia>) {
+        this.structs = structs;
         this.listaFunciones = listaFunciones;
         this.tablaDeSimbolos = tablaDeSimbolos;
         this.errores = errores;
     }
 
-    /**
-     * Verifica si existe la funcion Main
-     * @returns true si existe el metodo main, false si no existe el metodo main
-     */
-    existsMain():boolean {
-        let comprobante:boolean = false;
-        this.funciones.forEach(function(value) {
-            if(value.getNombre() == "main") {
-                comprobante = true;
-            }
-        });
-        if(!comprobante) {
-            let descripcion:string = 'No existe un metodo main'
-            this.errores.push(new Advertencia(0,0, 'Semantico', descripcion));
-        }
-        return comprobante;
-    }   
 
 }

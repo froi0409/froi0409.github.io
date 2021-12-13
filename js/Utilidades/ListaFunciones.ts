@@ -17,7 +17,7 @@ export class ListaFunciones {
 
     /**
      * Verifica si existe la funcion Main
-     * @returns true si existe el metodo main, false si no existe el metodo main
+     * @returns true si existe el funcion main, false si no existe el funcion main
      */
      existsMain():boolean {
         let comprobante:boolean = false;

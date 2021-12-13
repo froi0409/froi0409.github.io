@@ -8,8 +8,6 @@ export class Funcion {
     private tipo:string;
     private nombre:string;
     private instrucciones:Array<Instruccion>;
-    private tipoRetorno:string;
-    private valorRetorno:string;
 
     private linea:number;
     private columna:number;
@@ -18,8 +16,6 @@ export class Funcion {
         this.tipo = tipo;
         this.nombre = nombre;
         this.instrucciones = instrucciones;
-        this.tipoRetorno = '';
-        this.valorRetorno = '';
         this.linea = linea;
         this.columna = columna;
     }
@@ -38,12 +34,6 @@ export class Funcion {
     }
     getNombre() {
         return this.nombre;
-    }
-    getTipoRetorno() {
-        return this.tipoRetorno;
-    }
-    getValorRetorno() {
-        return this.valorRetorno;
     }
     getLinea() {
         return this.linea;

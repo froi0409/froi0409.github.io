@@ -21,8 +21,12 @@ export class TablaSimbolos {
         this.size++;
     }
 
-    getTabla() {
+    getTabla():Simbolo[] {
         return this.tabla;
+    }
+
+    getSize():number {
+        return this.size;
     }
 
 }

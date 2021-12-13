@@ -20,5 +20,8 @@ class TablaSimbolos {
     getTabla() {
         return this.tabla;
     }
+    getSize() {
+        return this.size;
+    }
 }
 exports.TablaSimbolos = TablaSimbolos;

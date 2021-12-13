@@ -15,6 +15,10 @@ export class ListaStructs {
         this.size = 0;
     }
 
+    /**
+     * Permite insertar un struct a la lista
+     * @param structA Struct que se va a ingresar
+     */
     insertStruct(structA:Struct) {
         let repetido:boolean = false;
         this.structs.forEach(function(value) {

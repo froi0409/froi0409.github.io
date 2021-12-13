@@ -1,19 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Simbolo = void 0;
-//Clase que nos permite manejar un simbolo
+/**
+ * Clase que nos permite manejar la tabla de simbolos
+ */
 class Simbolo {
     //Inicializa los valores fundamentales de un simbolo
-    constructor(identificador, tipo, valor, linea, columna) {
-        this.contexto = 'ninguno';
+    constructor(identificador, tipo, esArreglo, longitud, contexto, tipoSimbolo, posMemoria, valor, linea, columna) {
         this.identificador = identificador;
         this.tipo = tipo;
+        this.esArreglo = esArreglo;
+        this.longitud = longitud;
+        this.contexto = contexto;
+        this.tipoSimbolo = tipoSimbolo;
+        this.posMemoria = posMemoria;
         this.valor = valor;
-        this.tipoContexto = '';
-        this.nombreContexto = '';
-        this.idContexto = '';
         this.linea = linea;
         this.columna = columna;
+        this.contextoPadre = '-'; //Deberia iniciar siendo nulo
     }
     //Funcion que permite establecer un contexto para el simbolo. No está definido en el 
     //constructor para permitir variables sin contexto
@@ -23,25 +27,6 @@ class Simbolo {
     //Obtenemos el tipo de simbolo
     getTipo() {
         return this.tipo;
-    }
-    //Setters y Getters de Contexto
-    setTipoContexto(tipoContexto) {
-        this.tipoContexto = tipoContexto;
-    }
-    getTipoContexto() {
-        return this.tipoContexto;
-    }
-    setNombreContexto(nombreContexto) {
-        this.nombreContexto = nombreContexto;
-    }
-    getNombreContexto() {
-        this.nombreContexto;
-    }
-    setIdContexto(idContexto) {
-        this.idContexto = idContexto;
-    }
-    getIdContexto() {
-        return this.idContexto;
     }
 }
 exports.Simbolo = Simbolo;
