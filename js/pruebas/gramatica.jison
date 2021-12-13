@@ -1,21 +1,4 @@
 /*Parser*/
-
-%{
-    var listaErroresParser = [];
-
-    function addError(type, lexem, first_line, first_column) {
-        var auxError = 'Error '+type+' Token: '+ lexem + ' Linea: '+first_line + ' Columna: ' +first_column +'\n';
-        listaErroresParser.push(auxError); 
-    }
-    function addError(auxError) {
-        listaErroresParser.push(auxError + '\n'); 
-    }
-    function getErrorList(){
-        return listaErroresParser;
-    }
-    //exports.listaErroresParser = getErrorList();
-%}
-
 %lex
 
 commentary "//".*
@@ -164,27 +147,38 @@ block_commentary [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 [^\s]*     addError("Lexico", yytext, yylloc.first_line, yylloc.first_column + 1)      
 
 /lex
+
 %{
-    function linea(linea){
-        return linea;
+    var listaErroresParser = [];
+
+    function addError(type, lexem, first_line, first_column) {
+        var auxError = 'Error '+type+' Token: '+ lexem + ' Linea: '+first_line + ' Columna: ' +first_column +'\n';
+        listaErroresParser.push(auxError); 
     }
-    function columna(column){
-        return column;
+    function addError(auxError) {
+        listaErroresParser.push(auxError + '\n'); 
     }
-%}    
+    function getErrorList(){
+        return listaErroresParser;
+    }
+    //exports.listaErroresParser = getErrorList();
+%}
+
     %left 'ELSE'
     %left 'ELSE_IF'
-    %left 'SIGNO_INTERROGACION_CIERRE' 'DOS_PUNTOS'
+    //%left 'IGUAL'
+    %right 'SIGNO_INTERROGACION_CIERRE' 'DOS_PUNTOS'
     %left 'OR'
-    %left 'AND'    
-    %left 'NOT'
-    %left 'MAYOR_IGUAL' 'MENOR_IGUAL' 'DIFERENTE_IGUAL' 'IGUAL_IGUAL' 'MAYOR' 'MENOR' 'IGUAL'
-//    %left 'NOT'
+    %left 'AND'  
+    %left 'DIFERENTE_IGUAL' 'IGUAL_IGUAL'
+    %left 'MAYOR_IGUAL' 'MENOR_IGUAL'  'MAYOR' 'MENOR'    
     %left 'SIGNO_MAS' 'SIGNO_MIN'
-    %left 'SIGNO_POR' 'SIGNO_DIV' 'MOD'
-    %left 'POW' 'SIN' 'COS' 'TAN' 'LOG10'
-    %left 'UMINUS'
-    %left 'PAREN_INICIO' 'PAREN_FIN'        
+    %left 'SIGNO_POR' 'SIGNO_DIV' 'MOD'    
+    //%left 'POW' 'SQRT' 'SIN' 'COS' 'TAN' 'LOG10'
+    %left 'CONCAT_POW' 'CONCAT_AND'
+    %right 'UMINUS' 'NOT'
+    //%left incrementos 
+    %left 'PAREN_INICIO' 'PAREN_FIN' //[] .     
 
 %start init
 
@@ -218,7 +212,7 @@ instrucciones_funciones_declaracion :
     //Nombres de funciones
 instrucciones_funciones_declaracion_nombre_funciones :
         nombres_variables_unidad //nombres cualquiera de funciones
-        { $$ = $1; }
+       { $$ = $1; }
     |   MAIN                     //Main, reservada para la funcion main
         { $$ = $1; }
     ;
@@ -346,7 +340,7 @@ instrucciones_funciones_llamada : //Estas funciones pueden ser de cualquier tipo
 instrucciones_sentencia_control_ifs : 
         instrucciones_sentencia_control_ifs_if              //if        
         instrucciones_sentencia_control_ifs_else_if_block   //else if
-        instrucciones_sentencia_control_ifs_else            //else
+        instrucciones_sentencia_acontrol_ifs_else            //else
     ;
     //if
 instrucciones_sentencia_control_ifs_if : 
@@ -459,13 +453,13 @@ instrucciones_loops_for_each :
 //#PRINT
 //sentencias para declarar los print
 instrucciones_print : //seguramente haya un cambio de operacion_general a operaciones que retornen String unicamente
-        print PAREN_INICIO instrucciones_print_valores PAREN_FIN   //Print con valores
+        PRINT PAREN_INICIO instrucciones_print_valores PAREN_FIN   //Print con valores
         { console.log('Print con valores'); }
-    |   print PAREN_INICIO                             PAREN_FIN   //Print vacio
+    |   PRINT PAREN_INICIO                             PAREN_FIN   //Print vacio
         { console.log('Print vacio'); }
-    |   println PAREN_INICIO instrucciones_print_valores PAREN_FIN //Println con valores
+    |   PRINTLN PAREN_INICIO instrucciones_print_valores PAREN_FIN //Println con valores
         { console.log('Println con valores'); }
-    |   println PAREN_INICIO                             PAREN_FIN //Println sin valores
+    |   PRINTLN PAREN_INICIO                             PAREN_FIN //Println sin valores
         { console.log('Print vacio'); }
     ;
     //Conjunto de valores a imprimir por el print
@@ -523,6 +517,7 @@ instrucciones_variables_declaracion_simple :
         { console.log('NombreVar: ' + $1); }
     //|   //epsilon
     ;
+  
 
 //#ASIGNAR VALORES A VARIABLES    
     //asignacion sin declarar antes
@@ -556,6 +551,8 @@ tipo_datos_primarios :
     | CHAR
       { $$ = $1; }
     | STRING
+      { $$ = $1; }
+    | FLOAT
       { $$ = $1; }
     ;
 
@@ -600,11 +597,11 @@ bloque_valores_operacion_general :
     ;*/
     //valores ordinarios
 valores_datos_primarios : 
-      ENTERO_VALUE
+    ENTERO_VALUE
 	| DECIMAL_VALUE
 	| BOOLEAN_VALUE
 	| CHAR_VALUE
-    | STRING_VALUE
+  | STRING_VALUE
 	//| parametro_valor_name 
 	//| nombres_variables_unidad	
 	;
@@ -704,17 +701,17 @@ operacion_general :
     /////////////OPERACIONES NATIVAS
     | operacion_general MOD   operacion_general
       { console.log('Se efectua MOD'); }
-    | operacion_general POW   operacion_general
+    | POW PAREN_INICIO operacion_general PAREN_FIN
       { console.log('Se efectua POW'); }
-    | operacion_general SQRT  operacion_general
+    | SQRT PAREN_INICIO operacion_general PAREN_FIN
       { console.log('Se efectua SQRT'); }
-    | operacion_general LOG10 operacion_general
+    | LOG10 PAREN_INICIO operacion_general PAREN_FIN
       { console.log('Se efectua LOG10'); }
-    | operacion_general SIN   operacion_general
+    | SIN PAREN_INICIO operacion_general PAREN_FIN
       { console.log('Se efectua SIN'); }
-    | operacion_general COS   operacion_general
+    | COS PAREN_INICIO operacion_general PAREN_FIN
       { console.log('Se efectua COS'); }
-    | operacion_general TAN   operacion_general
+    | TAN PAREN_INICIO operacion_general PAREN_FIN
       { console.log('Se efectua TAN'); }
     /////////////CONCATENACIONES
     | operacion_general CONCAT_AND operacion_general
