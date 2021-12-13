@@ -1,0 +1,73 @@
+
+
+FALTA AGREGAR:
+    ### Funciones nativas de parsear
+    ### declaracion de funciones
+    ### Llamada de funciones unicamente 
+    ### Utilización de funciones con retorno como valor     
+    ### ForEach
+    ### Arreglo[begin:end]
+    ### arreglo.push()
+    ### arreglo.pop()
+    ### arreglo.length()
+    ### Return
+    ### Continue ciclos
+    ### Break ciclos
+    ### concatenacion pow
+    ### concatenacion &
+
+FALTAN:
+    #Estructuras.atributo    
+
+ERRORES:
+    ### Arreglo[begin:end], causa conflictos por el :
+
+CONFLICTOS:
+    ### Else/Else if se agregan al if más cercano, el analizador lo resuelve
+    ### NombreVar seguido de PUNTO/CORCH_INICIO lo resuelve el analizador
+
+PRECEDENCIA
+
+
+
+OPERACIONES
+
+//= right
+
+?: right
+|| left
+&& left
+
+!= left
+== left
+
+instanceOf
+< left
+<= left
+> left
+>= left
+
++ left
+- left
+
+* left
+/ left
+% left
+
+CONCAT_POW left
+CONCAT_AND left
+
+//POW SQRT LOG10 SIN COS TAN
+
+- MINUS UNARY right
+! right
+
+POST INCREMENT/DECREMENT
+++ left
+-- left
+
+() left
+[] left
+. left
+
+    
