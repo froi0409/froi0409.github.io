@@ -6,8 +6,9 @@ const Advertencia_1 = require("./Advertencia");
  * Clase que n os permite manejar las funciones de manera personalizada
  */
 class ListaFunciones {
-    constructor(funciones, errores) {
-        this.funciones = funciones;
+    constructor(tablaDeSimbolos, errores) {
+        this.funciones = [];
+        this.tablaDeSimbolos = tablaDeSimbolos;
         this.errores = errores;
         this.size = 0;
     }

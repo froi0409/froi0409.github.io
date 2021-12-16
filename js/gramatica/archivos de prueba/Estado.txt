@@ -1,0 +1,60 @@
+
+###Clase de Tabla de simbolos
+###Clase de estructuras
+###Clase de Funciones
+###Metodología para manejar las funciones
+###Clase de Flujo
+###
+
+# Construir/generar el arbol AST utilizando la gramatica
+# Construir/generar árbol de expresiones
+# Completar las clases de algunas instrucciones (la mayoría)
+# Funcionalidades (interpretación)
+
+
+
+
+3D:
+# Generar codigo 3D de datos int, char y double
+# Generar codigo 3D de operaciones, y asignaciones
+# Manejar codigo 3D de datos String y arrays
+# Generar codigo 3D de loops
+# Generar codigo 3D de if/switch 
+# Generar codigo 3D de funciones y metodos
+# Cambiar valor variables
+
+int funcion1(int a, int b){
+
+/////
+
+}
+
+
+
+dpuble Stack[23626464646464];
+double Heap[23626464646464];
+double H; //apuntador del heap
+double p; //apuntador del stack
+double t1, t2, ...., tn;
+
+void funcion1(){
+
+
+
+}
+
+void main(){
+    int a = funcion1(2 * 6 + 6, 3);
+    if(a == b){
+
+
+    }else{
+
+
+    }
+
+
+
+}
+
+

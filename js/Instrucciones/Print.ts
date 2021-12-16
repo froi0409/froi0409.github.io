@@ -6,13 +6,26 @@ import { Instruccion } from "./Instruccion";
 //Clase que nos permite manejar la instruccion Print
 export class Print implements Instruccion {
     
+    contexto: Instruccion;
+    nombre: string;
+
     //Atributos de la instruccion Print
     impresion:string; //Texto que se va a imprimir en la consola
     endl:boolean; //Si tiene valor true si se usa println, de lo contrario debe tener false
     
-    constructor(impresion:string, endl:boolean) {
+    constructor(impresion:string, contexto:Instruccion, endl:boolean) {
         this.impresion = impresion;
         this.endl = endl;
+        this.nombre = '';
+        this.contexto = contexto;
+        console.log('Valor a Imprimir: ' + this.impresion);
+    }
+    
+    ejecutarAnalisisSemantico(tabla: TablaSimbolos, listadoErrores: Advertencia[]) {
+        throw new Error("Method not implemented.");
+    }
+    ejecutarFuncionalidad() {
+        throw new Error("Method not implemented.");
     }
     
     //Ejecuta la instrucción de impresión

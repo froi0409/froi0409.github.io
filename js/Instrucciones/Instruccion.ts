@@ -6,8 +6,14 @@ import { Advertencia } from "../Utilidades/Advertencia";
 //Interfaz que demuestra la base de todas las instrucciones
 export interface Instruccion {
 
+    contexto:Instruccion;
+    nombre:string;
+
     //Nos permite ejecutar la respectiva instruccion
-    ejecutar(tabla:TablaSimbolos, listadoErrores:Array<Advertencia>, ast:AST): any;
+    ejecutarAnalisisSemantico(tabla:TablaSimbolos, listadoErrores:Array<Advertencia>): any;
+
+    ejecutarFuncionalidad():any;
+
     //Nos permite traducir la respectiva instruccion
     traducir(tabla:TablaSimbolos, ast:AST): any;
 

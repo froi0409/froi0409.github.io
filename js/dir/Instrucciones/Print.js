@@ -3,9 +3,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Print = void 0;
 //Clase que nos permite manejar la instruccion Print
 class Print {
-    constructor(impresion, endl) {
+    constructor(impresion, contexto, endl) {
         this.impresion = impresion;
         this.endl = endl;
+        this.nombre = '';
+        this.contexto = contexto;
+        console.log('Valor a Imprimir: ' + this.impresion);
+    }
+    ejecutarAnalisisSemantico(tabla, listadoErrores) {
+        throw new Error("Method not implemented.");
+    }
+    ejecutarFuncionalidad() {
+        throw new Error("Method not implemented.");
     }
     //Ejecuta la instrucción de impresión
     ejecutar(tabla, listadoErrores, ast) {

@@ -5,12 +5,22 @@ exports.Funcion = void 0;
  * Clase que da la base de una funcion
  */
 class Funcion {
-    constructor(tipo, nombre, instrucciones, linea, columna) {
+    constructor(tipo, nombre, instrucciones, contexto, linea, columna) {
         this.tipo = tipo;
         this.nombre = nombre;
+        this.contexto = contexto;
         this.instrucciones = instrucciones;
         this.linea = linea;
         this.columna = columna;
+    }
+    ejecutarAnalisisSemantico(tabla, listadoErrores) {
+        throw new Error("Method not implemented.");
+    }
+    ejecutarFuncionalidad() {
+        throw new Error("Method not implemented.");
+    }
+    traducir(tabla, ast) {
+        throw new Error("Method not implemented.");
     }
     /**
      * Permite agregar una instruccion a la lista de instrucciones

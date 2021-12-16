@@ -1,3 +1,5 @@
+import { Instruccion } from "../Instrucciones/Instruccion";
+
 /**
  * Clase que nos permite manejar la tabla de simbolos
  */
@@ -8,7 +10,7 @@ export class Simbolo {
     tipo:string; //Tipo de dato del simbolo: int, char, etc
     esArreglo:boolean; //Permite identificar si el simbolo es un arreglo o no
     longitud:number; //Permite identificar la longitud del arreglo (en el caso de ser necesario)
-    contexto:Object; //Permite identificar el contexto en el que se encuentra el simbolo
+    contexto:Instruccion; //Permite identificar el contexto en el que se encuentra el simbolo
     tipoSimbolo:string; //permite saber si el simbolo es una variable, funcion, etc
     posMemoria:number; //posicion en memoria del simbolo
     valor:Object; //Valor del simbolo
@@ -19,7 +21,7 @@ export class Simbolo {
     contextoPadre:Object; //Contexto padre del objeto
 
     //Inicializa los valores fundamentales de un simbolo
-    constructor(identificador:string, tipo:string, esArreglo:boolean, longitud:number, contexto:Object, tipoSimbolo:string, posMemoria:number, valor:Object, linea:number, columna:number) {
+    constructor(identificador:string, tipo:string, esArreglo:boolean, longitud:number, contexto:Instruccion, tipoSimbolo:string, posMemoria:number, valor:Object, linea:number, columna:number) {
         this.identificador = identificador;
         this.tipo = tipo;
         this.esArreglo = esArreglo;
@@ -35,7 +37,7 @@ export class Simbolo {
 
     //Funcion que permite establecer un contexto para el simbolo. No está definido en el 
     //constructor para permitir variables sin contexto
-    setContexto(contexto:string) {
+    setContexto(contexto:Instruccion) {
         this.contexto = contexto;
     }
 
